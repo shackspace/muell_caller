@@ -1,4 +1,4 @@
-import requests,sys
+import requests,sys,json
 from datetime import datetime,timedelta
 
 def tell(text):
@@ -18,9 +18,9 @@ next_date = datetime.strptime(ret['gelber_sack'],'%Y-%m-%d') + last_call
 now = datetime.now() # + timedelta(days=int(sys.argv[1]))
 
 if next_date - alert_offset < now  < next_date:
-    tell('es ist gelber sack tag' )
+    tell('Your attention please.This is a public service announcement.')
+    tell('It is yellow trashbag day, please bring out the trash! Thank you.' )
 else:
-    #tell('es ist kein gelber sack tag')
+    # works, haha
+    #print('es ist kein gelber sack tag')
     pass
-
-
