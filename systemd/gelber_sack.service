@@ -1,0 +1,10 @@
+[Unit]
+Description=gelber sack announcement
+
+[Service]
+Type=oneshot
+User=nobody
+Group=nobody
+#RemainAfterExit=yes
+WorkingDirectory=/opt/call_muell/
+ExecStart=/usr/bin/python call.py

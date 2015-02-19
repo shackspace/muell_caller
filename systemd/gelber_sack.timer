@@ -1,0 +1,8 @@
+[Unit]
+Description=hourly timer for the gelben sack
+
+[Timer]
+OnUnitActiveSec=1h
+
+[Install]
+WantedBy=timers.target
