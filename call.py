@@ -6,7 +6,7 @@ def tell(text):
     import requests
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     data = {'text': text}
-    requests.post("http://kiosk.shack:8080/say/",
+    requests.post("http://gobbelz.shack/say/",
             data=json.dumps(data), headers=headers)
 
 # alert 1 day before
