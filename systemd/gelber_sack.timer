@@ -2,6 +2,7 @@
 Description=hourly timer for the gelben sack
 
 [Timer]
+OnBootSec=5min
 OnUnitActiveSec=1h
 
 [Install]
