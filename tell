@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+import requests,sys,json
+from datetime import datetime,timedelta
+
+def tell(text):
+    print(text)
+    import requests
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    data = {'text': text}
+    print(requests.post("http://gobbelz.shack/say/",
+            data=json.dumps(data), headers=headers))
+
+tell(" ".join(sys.argv[1:]))
