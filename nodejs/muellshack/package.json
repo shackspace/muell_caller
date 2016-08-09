@@ -9,8 +9,10 @@
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "cors": "~2.5.3",
     "express": "~4.11.2",
-    "cors": "~2.5.3"
+    "nconf": "~0.6.9"
   },
   "repository": {
     "type": "git",
