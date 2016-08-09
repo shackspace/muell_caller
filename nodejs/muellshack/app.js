@@ -75,6 +75,7 @@ function getNextMuelldate(muell_type) {
 
 	for (i = 0; i < muelldata.length; i++) {
 		date_i = new Date(muelldata[i])
+		date_i.setHours(23,59);
 		if (date_i > new Date())
 		{
 			retval[muell_type] = muelldata[i]
