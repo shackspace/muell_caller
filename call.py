@@ -42,12 +42,14 @@ if __name__ == "__main__":
         next_date = datetime.strptime(ret[i],'%Y-%m-%d') + last_call
         now = datetime.now() # + timedelta(days=int(sys.argv[1]))
         txt = i.replace('_',' ').replace('ue','ü').capitalize()
-        if next_date - alert_offset < now  < next_date:
+        if ret['main_action_done']:
+            print('{} bereits herunter gebracht'.format(txt))
+        elif next_date - alert_offset < now  < next_date:
             tell_mpd('Achtung morgen wird der {} abgeholt!'.format(txt))
             #tell('Your attention please.This is a public service announcement.')
             #tell('It is yellow trashbag day, please bring out the trash! Thank you.' )
         else:
             # works, haha
             print('es ist kein {} tag'.format(txt))
-            tell_mpd('es ist kein {} tag'.format(txt))
+            # tell_mpd('es ist kein {} tag'.format(txt))
             pass
