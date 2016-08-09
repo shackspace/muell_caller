@@ -30,18 +30,19 @@ app.post('/muellshack/:muellarg/', function(req, res, next) {
 
 	muell_status[muellarg][next_muelldate].main_action_done = req.body.main_action_done;
 
-	muell_log.push({
-		'event_date': new Date(),
-		'muell_type':muellarg,
-		'muell_date':next_muelldate,
-		'event_msg': 'put event',
-		'message':req.body
-	});
-
-	nconf.save();
+	const limit   = 5;
+	var dat_limit = new Date(next_muelldate);
+	dat_limit = new Date(dat_limit.setDate(dat_limit.getDate() - limit));
 
 	res.type('application/json'); // set content-type
-	res.json({'message':'Thanks for using muellshack'});
+	if (new Date() < dat_limit) {
+		log_msg(muellarg, next_muelldate, '403 - Forbidden', req.body);
+		res.status(403).send('Forbidden');
+	} else {
+		log_msg(muellarg, next_muelldate, 'put event', req.body);
+		res.json({'message':'Thanks for using muellshack'});
+	}
+
 });
 
 app.get('/muellshack/:muellarg', function(req, res, next) {
@@ -56,8 +57,6 @@ app.get('/muellshack/:muellarg', function(req, res, next) {
 	var value = get_muell_status(muellarg, output[muellarg]);
 	if (value.hasOwnProperty("main_action_done"))
 		output['main_action_done'] = value.main_action_done;
-
-	nconf.save();
 
 	res.type('application/json'); // set content-type
 	res.json(output);
@@ -93,9 +92,18 @@ function get_muell_status(muell_type,muell_date) {
 	return {"date":muell_date};
 }
 
+function log_msg(muellarg, next_muelldate, event_msg, message) {
+	muell_log.push({
+		'event_date': new Date(),
+		'muell_type':muellarg,
+		'muell_date':next_muelldate,
+		'event_msg': event_msg,
+		'message': message
+	});
+	nconf.save();
+}
+
 function exitHandler(options, err) {
-	nconf.set('muell_log',muell_log);
-	nconf.set('muell_status',muell_status);
 	nconf.save();
     if (options.exit) process.exit();
 }
