@@ -17,8 +17,15 @@ Maybe you have to add this to your config:
 	}
 
 ## startup
-Don't forget to autostart
+Don't forget to autostart with pm2
 
-	etc/init.d/muellshack
+	sudo su -c "env PATH=$PATH:/usr/bin pm2 startup linux -u shack --hp /home/shack"
+	pm2 start process.json
+	pm2 save
 
 will work on ubuntu
+
+## check the process
+
+	sudo su -c "pm2 status" shack
+
