@@ -15,7 +15,7 @@ var muell_status = nconf.get('muell_status');
 
 app.post('/muellshack/:muellarg/', function(req, res, next) {
 	var muellarg  = req.params.muellarg;
-	var next_muelldate = getNextMuelldate(muellarg)[muellarg];
+	var next_muelldate = getNextMuelldate(muellarg)['date'];
 	var muelldata = config[muellarg];
 
 	if (!(muellarg in config))
@@ -28,7 +28,10 @@ app.post('/muellshack/:muellarg/', function(req, res, next) {
 	if (!muell_status[muellarg][next_muelldate])
 		muell_status[muellarg][next_muelldate] = {};
 
-	muell_status[muellarg][next_muelldate].main_action_done = req.body.main_action_done;
+	if (req.body.hasOwnProperty("main_action_done"))
+		muell_status[muellarg][next_muelldate].main_action_done = req.body.main_action_done;
+	if (req.body.hasOwnProperty("mail_sended"))
+		muell_status[muellarg][next_muelldate].mail_sended = req.body.mail_sended;
 
 	const limit   = 5;
 	var dat_limit = new Date(next_muelldate);
@@ -48,15 +51,19 @@ app.post('/muellshack/:muellarg/', function(req, res, next) {
 app.get('/muellshack/:muellarg', function(req, res, next) {
 	var muellarg = req.params.muellarg;
 	var output = getNextMuelldate(muellarg);
+	output[muellarg] = output.date;
 
 	if (!output[muellarg])
 		return next();
 
 	output['main_action_done'] = false;
+	output['mail_sended'] = false;
 
 	var value = get_muell_status(muellarg, output[muellarg]);
 	if (value.hasOwnProperty("main_action_done"))
 		output['main_action_done'] = value.main_action_done;
+	if (value.hasOwnProperty("mail_sended"))
+		output['mail_sended'] = value.mail_sended;
 
 	res.type('application/json'); // set content-type
 	res.json(output);
@@ -67,8 +74,7 @@ app.listen(process.env.PORT || 8081);
 function getNextMuelldate(muell_type) {
 	var muelldata = config[muell_type];
 
-	var retval = {};
-	retval[muell_type] = false;
+	var retval = {date: null, muelltype: muell_type};
 
 	if (!(muell_type in config))
 		return retval;
@@ -78,7 +84,7 @@ function getNextMuelldate(muell_type) {
 		date_i.setHours(23,59);
 		if (date_i > new Date())
 		{
-			retval[muell_type] = muelldata[i]
+			retval.date = muelldata[i]
 			break;
 		}
 	}
