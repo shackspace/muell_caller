@@ -12,6 +12,8 @@ import requests,sys,json
 from datetime import datetime,timedelta
 import json
 import logging
+import sys
+import traceback
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger()
@@ -30,7 +32,7 @@ def tell_mpd(text,sshcfg):
     import paramiko, base64
     user = sshcfg["client-mpd-user"]
     pw = sshcfg["client-mpd-pw"]
-    pubkey = paramiko.RSAKey(data=base64.decodestring(sshcfg['client-mpd-pubkey']))
+    pubkey = paramiko.RSAKey(data=base64.decodestring(sshcfg['client-mpd-pubkey'].encode()))
     log.info("tell_mpd: " + text)
 
     client = paramiko.SSHClient()
@@ -86,6 +88,7 @@ def main():
             do_call(mode,cfg)
         except Exception as e:
             log.warn("Unable to make call, reason: {}".format(e))
+            traceback.print_exc(file=sys.stderr)
         log.info("sleeping for another {} minutes".format(timeout/60))
         sleep(timeout)
     else:
