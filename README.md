@@ -1,3 +1,5 @@
+migrated to new location: https://codeberg.org/shackspace/muell_caller
+
 # Call Gelber Sack
 
 Scope of this project is to glue two projects in the shackspace:
